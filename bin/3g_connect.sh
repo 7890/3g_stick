@@ -29,16 +29,19 @@ then
 	exit 1
 fi
 
+echo "looking for gsm stick..."
+echo "========================"
+
 cont=1
 while [ $cont = 1 ]
 do
-	echo "looking for gsm stick..."
-	echo "========================"
-	lsusb | grep "$lsusb_grep_line"
-
+	echo -n "."
+	lsusb | grep "$lsusb_grep_line" >/dev/null 2>&1
 	cont=$?
 	sleep 2
 done
+echo ""
+lsusb | grep "$lsusb_grep_line"
 
 echo "found gsm stick."
 echo "================"
