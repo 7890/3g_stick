@@ -6,8 +6,16 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$DIR"/3g_config.sh
 
-for tool in {sed,gammu,killall}; \
+for tool in {"$sakis3g","$oscsend",sed,gammu,killall,id,egrep}; \
 	do checkAvail "$tool"; done
+
+#check if script is started as root or sudo
+user_id=`id -u`
+if [ x"$user_id" != "x0" ]
+then
+	echo "run script as user root or with sudo."
+	exit 1
+fi
 
 echo "disconnecting sakis3g connection"
 echo "================================"
@@ -58,9 +66,17 @@ balance=`cat "$gammu_allsms" | grep -B2 -A5 ' : "444"' | grep -A5 "UnRead" \
 
 $oscsend $osc_report_host $osc_report_port /gprs/rxtx ii $rx_bytes $tx_bytes
 
-echo "sending status SMS to $destination_phone"
-echo "=================================="
+#+xxyyzzzzzzz
+phone=`echo "$destination_phone" | egrep -o "+[[:digit:]]{11,11}"`
+ret=$?
 
-echo -e "GPRS Verbindung getrennt.\nRX: $rx_bytes\nTX: $tx_bytes\n`date`\nVerfügbar: $balance" \
-	| gammu sendsms TEXT "$destination_phone"
+if [ x"$ret" = "x0" ]
+then
+	echo "sending status SMS to $destination_phone"
+	echo "=================================="
 
+	echo -e "GPRS Verbindung getrennt.\nRX: $rx_bytes\nTX: $tx_bytes\n`date`\nVerfügbar: $balance" \
+		| gammu sendsms TEXT "$destination_phone"
+else
+	echo "phone number for sms notification not valid"
+fi
