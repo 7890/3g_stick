@@ -45,7 +45,9 @@ echo "================"
 
 dmesg | tail -20
 
-sleep 5
+sleep 10
+
+killall -9 3g_report_rxtx.sh
 
 echo "setting up 3g stick"
 echo "==================="
@@ -53,10 +55,35 @@ echo "==================="
 eject /dev/sr0
 rmmod option
 #usb_modeswitch -W -v "$stick_vendor" -p "$stick_product"
-sleep 1
 modprobe option
 echo "$stick_vendor $stick_product" > /sys/bus/usb-serial/drivers/option1/new_id
-sleep 8
+
+done_=0
+for i in {1..20}
+do
+	if [ $done_ -eq 0 ]
+	then
+
+		echo "waiting for GSM modem serial port"
+		dmesg | tail -20 | grep "GSM modem (1-port) converter now attached to ttyUSB" >/dev/null 2>&1
+		ret=$?
+
+		sleep 1
+
+		if [ x"$ret" = "x0" ]
+		then
+			done_=1
+		fi
+	fi
+done
+
+sleep 5
+
+if [ $done_ -ne 1 ]
+then
+	echo "giving up after 20 tries."
+	exit 1
+fi
 
 echo "dmesg output"
 echo "============"
