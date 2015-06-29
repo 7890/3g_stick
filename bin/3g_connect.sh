@@ -6,6 +6,15 @@
 #in /etc/usb_modeswitch.conf:
 #DisableSwitching=1
 
+#in ~/.gammurc:
+#adjust port to /dev/ttyUSB2
+#-> send/receive sms while gprs connection established
+
+#to connect at system startup:
+#in /etc/rc.local:
+#screen -d -m -S osclog /usr/local/bin/oscdump 9999
+#/path/to/3g_stick/bin/3g_connect.sh >> /tmp/3g_connect.log 2>&1 &
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$DIR"/3g_config.sh
 
@@ -48,10 +57,10 @@ echo "============"
 dmesg | tail -20
 
 #$ gammu getsmsfolders
-#1. "                         Inbox", SIM memory, Inbox folder
-#2. "                        Outbox", SIM memory, Outbox folder
-#3. "                         Inbox", phone memory, Inbox folder
-#4. "                        Outbox", phone memory, Outbox folder
+#1. "  Inbox", SIM memory, Inbox folder
+#2. " Outbox", SIM memory, Outbox folder
+#3. "  Inbox", phone memory, Inbox folder
+#4. " Outbox", phone memory, Outbox folder
 
 echo "deleting SMS on device"
 echo "======================"
