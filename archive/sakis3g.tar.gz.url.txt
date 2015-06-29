@@ -1,0 +1,14 @@
+http://downloads.sourceforge.net/project/vim-n4n0/sakis3g.tar.gz
+Mon Jun 29 16:46:51 CEST 2015
+
+alternative link
+https://github.com/RadiusNetworks/sakis3g
+
+unfortunately the original homepage of sakis3g is offline
+http://www.sakis3g.org
+
+#disassemble sakis3g files to /tmp
+sakis3g disassemble /tmp
+
+#interactively connect
+sudo sakis3g connect --interactive
