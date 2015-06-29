@@ -25,7 +25,12 @@ oscsend=/usr/local/bin/oscsend
 osc_report_host=localhost
 osc_report_port=9999
 
+#whether or not to delete all sms on sim / stick on initialization
+#0: disabled 1: enabled
+delete_all_sms=0
+
 #SMS reports (connected, disconnected, transfer stats, debit)
+#if number is not valid (xxxx) no attempt to send will be made
 destination_phone="+41xxxxxxxxx"
 
 _3g_network_interface="ppp0"
