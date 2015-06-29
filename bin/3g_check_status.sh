@@ -6,6 +6,17 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$DIR"/3g_config.sh
 
+for tool in {"$sakis3g","$oscsend",cut,id}; \
+	do checkAvail "$tool"; done
+
+#check if script is started as root or sudo
+user_id=`id -u`
+if [ x"$user_id" != "x0" ]
+then
+	echo "run script as user root or with sudo."
+	exit 1
+fi
+
 echo "checking sakis3g connection status"
 echo "=================================="
 
