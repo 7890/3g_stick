@@ -137,7 +137,7 @@ then
 	if [ x"$ret" = "x0" ]
 	then
 		echo "notifiying connection success to $destination_phone"
-		echo "==================================================="
+		echo "============================================="
 		echo -e "GPRS Verbindung aufgebaut.\n`date`" | gammu sendsms TEXT "$destination_phone"
 	else
 		echo "phone number for sms notification not valid"
