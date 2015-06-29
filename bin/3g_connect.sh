@@ -18,8 +18,16 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 . "$DIR"/3g_config.sh
 
-for tool in {lsusb,rmmod,eject,usb_modeswitch,modprobe,gammu,sed,dmesg,ifconfig}; \
+for tool in {"$sakis3g","$oscsend","$report_rxtx",lsusb,rmmod,eject,usb_modeswitch,modprobe,gammu,sed,cut,dmesg,ifconfig,id,egrep}; \
 	do checkAvail "$tool"; done
+
+#check if script is started as root or sudo
+user_id=`id -u`
+if [ x"$user_id" != "x0" ]
+then
+	echo "run script as user root or with sudo."
+	exit 1
+fi
 
 cont=1
 while [ $cont = 1 ]
@@ -56,18 +64,24 @@ echo "============"
 
 dmesg | tail -20
 
-#$ gammu getsmsfolders
-#1. "  Inbox", SIM memory, Inbox folder
-#2. " Outbox", SIM memory, Outbox folder
-#3. "  Inbox", phone memory, Inbox folder
-#4. " Outbox", phone memory, Outbox folder
+if [ x"$delete_all_sms" = "x1" ]
+then
 
-echo "deleting SMS on device"
-echo "======================"
-gammu deleteallsms 1
-gammu deleteallsms 2
-gammu deleteallsms 3
-gammu deleteallsms 4
+	#$ gammu getsmsfolders
+	#1. "  Inbox", SIM memory, Inbox folder
+	#2. " Outbox", SIM memory, Outbox folder
+	#3. "  Inbox", phone memory, Inbox folder
+	#4. " Outbox", phone memory, Outbox folder
+
+	echo "deleting SMS on device"
+	echo "======================"
+	gammu deleteallsms 1
+	gammu deleteallsms 2
+	gammu deleteallsms 3
+	gammu deleteallsms 4
+else
+	echo "keeping all SMS"
+fi
 
 eval "$pre_connect_cmd"
 
@@ -87,9 +101,18 @@ then
 
 	eval "$post_connect_cmd"
 
-	echo "notifiying connection success to $destination_phone"
-	echo "==================================================="
-	echo -e "GPRS Verbindung aufgebaut.\n`date`" | gammu sendsms TEXT "$destination_phone"
+	#+xxyyzzzzzzz
+	phone=`echo "$destination_phone" | egrep -o "+[[:digit:]]{11,11}"`
+	ret=$?
+
+	if [ x"$ret" = "x0" ]
+	then
+		echo "notifiying connection success to $destination_phone"
+		echo "==================================================="
+		echo -e "GPRS Verbindung aufgebaut.\n`date`" | gammu sendsms TEXT "$destination_phone"
+	else
+		echo "phone number for sms notification not valid"
+	fi
 
 else
 	$oscsend $osc_report_host $osc_report_port /gprs/connection_setup/error
