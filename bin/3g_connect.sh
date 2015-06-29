@@ -52,12 +52,11 @@ echo "==================="
 
 eject /dev/sr0
 rmmod option
-usb_modeswitch -W -v "$stick_vendor" -p "$stick_product"
+#usb_modeswitch -W -v "$stick_vendor" -p "$stick_product"
 sleep 1
 modprobe option
-sleep 1
 echo "$stick_vendor $stick_product" > /sys/bus/usb-serial/drivers/option1/new_id
-sleep 5
+sleep 8
 
 echo "dmesg output"
 echo "============"
