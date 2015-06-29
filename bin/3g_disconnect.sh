@@ -80,3 +80,5 @@ then
 else
 	echo "phone number for sms notification not valid"
 fi
+
+$oscsend $osc_report_host $osc_report_port /gprs/status s "$balance"
