@@ -117,7 +117,7 @@ eval "$pre_connect_cmd"
 echo "connecting with sakis3"
 echo "======================"
 
-$sakis3g --sudo "connect" USBMODEM="$sakis_USBMODEM" USBINTERFACE="$sakis_USBINTERFACE" APN="$sakis_APN"
+$sakis3g --sudo "connect" --console USBMODEM="$sakis_USBMODEM" USBINTERFACE="$sakis_USBINTERFACE" APN="$sakis_APN"
 
 ret=$?
 

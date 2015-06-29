@@ -30,7 +30,7 @@ killall -9 3g_report_rxtx.sh
 eval "$pre_disconnect_cmd"
 
 #disconnect gprs
-$sakis3g --sudo "disconnect" USBMODEM="$sakis_USBMODEM" USBINTERFACE="$sakis_USBINTERFACE" APN="$sakis_APN"
+$sakis3g --sudo "disconnect" --console USBMODEM="$sakis_USBMODEM" USBINTERFACE="$sakis_USBINTERFACE" APN="$sakis_APN"
 
 ret=$?
 echo $ret
